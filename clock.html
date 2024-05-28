@@ -51,18 +51,29 @@
     let startTime = 0;
     let elapsed = 0; // to track elapsed time in seconds
 
-    function updateClock() {
-        elapsed++; // Increment elapsed time by 1 second
+    // Retrieve elapsed time from local storage on page load
+    window.onload = function() {
+        elapsed = parseInt(localStorage.getItem('elapsedTime')) || 0;
+        updateClock(false); // Pass false to prevent auto-incrementing on load
+    };
+
+    function updateClock(increment = true) {
+        if (increment) {
+            elapsed++; // Only increment elapsed time by 1 second if increment is true
+        }
         let seconds = elapsed % 60;
         let minutes = Math.floor(elapsed / 60) % 60;
         let hours = Math.floor(elapsed / 3600) % 24;
         let days = Math.floor(elapsed / 86400) % 7;
         let weeks = Math.floor(elapsed / 604800) % 4;
         let months = Math.floor(elapsed / 2592000);
-
+    
         document.getElementById('clock').innerText = `${months}m ${weeks}w ${days}d ${hours}h ${minutes}m ${seconds}s ago`;
+    
+        // Store elapsed time in local storage
+        localStorage.setItem('elapsedTime', elapsed);
     }
-
+    
     function startClock() {
         if (!isRunning) {
             updateClock(); // Update immediately to avoid delay
