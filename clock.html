@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Clock Widget</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        align-items: center;
+    }
+    #clock {
+        font-size: 24px;
+        padding: 20px;
+        background: white;
+        border: 2px solid #000;
+        border-radius: 5px;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+    }
+    button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div id="clock">0m 0w 0d 0h 0m 0s ago</div>
+    <div class="buttons">
+        <button id="startClock" onclick="startClock()">Start</button>
+        <button id="stopClock" onclick="stopClock()">Stop</button>
+    </div>
+</div>
+
+<script>
+    let timer;
+    let isRunning = false;
+    let startTime = 0;
+    let elapsed = 0; // to track elapsed time in seconds
+
+    function updateClock() {
+        elapsed++; // Increment elapsed time by 1 second
+        let seconds = elapsed % 60;
+        let minutes = Math.floor(elapsed / 60) % 60;
+        let hours = Math.floor(elapsed / 3600) % 24;
+        let days = Math.floor(elapsed / 86400) % 7;
+        let weeks = Math.floor(elapsed / 604800) % 4;
+        let months = Math.floor(elapsed / 2592000);
+
+        document.getElementById('clock').innerText = `${months}m ${weeks}w ${days}d ${hours}h ${minutes}m ${seconds}s ago`;
+    }
+
+    function startClock() {
+        if (!isRunning) {
+            updateClock(); // Update immediately to avoid delay
+            timer = setInterval(updateClock, 1000);
+            isRunning = true;
+        }
+    }
+
+    function stopClock() {
+        clearInterval(timer);
+        isRunning = false;
+    }
+</script>
+</body>
+</html>
